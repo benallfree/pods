@@ -1039,45 +1039,12 @@ class Pods implements Iterator {
 					// Dot-traversal
 					$pod = $this->pod;
 					$ids = array( $this->id() );
-					$all_fields = array();
+					$all_fields = array( $this->pod => $this->fields );
 
-					$lookup = $params->traverse;
-
-					if ( !empty( $lookup ) ) {
-						unset( $lookup[ 0 ] );
-
-						foreach ( $this->fields as $field ) {
-							if ( !in_array( $field[ 'type' ], $tableless_field_types ) || in_array( $field[ 'name' ], $lookup ) )
-								continue;
-
-							$lookup[] = $field[ 'name' ];
-						}
-					}
-
-					// Get fields matching traversal names
-					if ( !empty( $lookup ) ) {
-						$fields = $this->api->load_fields( array(
-							'name' => $lookup,
-							'type' => $tableless_field_types,
-							'object_fields' => true // @todo support object fields too
-						) );
-
-						if ( !empty( $fields ) ) {
-							foreach ( $fields as $field ) {
-								if ( !empty( $field ) ) {
-									if ( !isset( $all_fields[ $field[ 'pod' ] ] ) )
-										$all_fields[ $field[ 'pod' ] ] = array();
-
-									$all_fields[ $field[ 'pod' ] ][ $field[ 'name' ] ] = $field;
-								}
-							}
-						}
-
-						if ( isset( $this->pod_data[ 'object_fields' ] ) && !empty( $this->pod_data[ 'object_fields' ] ) ) {
-							foreach ( $this->pod_data[ 'object_fields' ] as $object_field => $object_field_opt ) {
-								if ( in_array( $object_field_opt[ 'type' ], $tableless_field_types ) ) {
-									$all_fields[ $this->pod ][ $object_field ] = $object_field_opt;
-								}
+					if ( isset( $this->pod_data[ 'object_fields' ] ) && !empty( $this->pod_data[ 'object_fields' ] ) ) {
+						foreach ( $this->pod_data[ 'object_fields' ] as $object_field => $object_field_opt ) {
+							if ( in_array( $object_field_opt[ 'type' ], $tableless_field_types ) ) {
+								$all_fields[ $this->pod ][ $object_field ] = $object_field_opt;
 							}
 						}
 					}
