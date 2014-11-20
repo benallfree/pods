@@ -1207,12 +1207,13 @@ class Pods implements Iterator {
 							 * @var $related_obj Pods
 							 */
 							$related_obj = false;
-
+							/*
+							// Temporarily disabled because it was taking about 25% longer to do this vs the old way
 							if ( 'pod' == $object_type )
 								$related_obj = pods( $object, null, false );
 							elseif ( isset( $table[ 'pod' ] ) && !empty( $table[ 'pod' ] ) )
 								$related_obj = pods( $table[ 'pod' ][ 'name' ], null, false );
-
+							*/
 							if ( !empty( $table[ 'table' ] ) || !empty( $related_obj ) ) {
 								$sql = array(
 									'select' => '*, `t`.`' . $table[ 'field_id' ] . '` AS `pod_item_id`',
